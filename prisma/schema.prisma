@@ -55,13 +55,27 @@ model Member {
 }
 
 model MemberVisit {
-  id           Int       @id @default(autoincrement())
+  id           Int           @id @default(autoincrement())
   MemberInfoID Int
   VisitingDate String
   InTime       String
   OutTime      String?
-  GuestCount   Int?      @default(0)
-  CreatedAt    DateTime  @default(now())
-  UpdatedAt    DateTime? @updatedAt
-  Member       Member    @relation(fields: [MemberInfoID], references: [id])
+  GuestCount   Int?          @default(0)
+  CreatedAt    DateTime      @default(now())
+  UpdatedAt    DateTime?     @updatedAt
+  Member       Member        @relation(fields: [MemberInfoID], references: [id])
+  MemberGuest  MemberGuest[]
+}
+
+model MemberGuest {
+  id            Int         @id @default(autoincrement())
+  MemberVisitID Int
+  FullName      String
+  Address       String?
+  PhoneNo       String
+  Rfid          String
+  VisitingDate  String
+  InTime        String
+  OutTime       String?
+  MemberVisit   MemberVisit @relation(fields: [MemberVisitID], references: [id])
 }
