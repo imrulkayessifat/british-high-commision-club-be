@@ -52,6 +52,7 @@ model Member {
   MaxGuestAllow    Int?
   IsCheckIn        Boolean       @default(false)
   MemberVisit      MemberVisit[]
+  MemberEvent      MemberEvent[]
 }
 
 model MemberVisit {
@@ -68,14 +69,33 @@ model MemberVisit {
 }
 
 model MemberGuest {
-  id            Int         @id @default(autoincrement())
-  MemberVisitID Int
+  id            Int          @id @default(autoincrement())
+  MemberVisitID Int?
   FullName      String
+  EventId       Int?
   Address       String?
   PhoneNo       String
-  Rfid          String
-  VisitingDate  String
-  InTime        String
+  Rfid          String?
+  VisitingDate  String?
+  InTime        String?
   OutTime       String?
-  MemberVisit   MemberVisit @relation(fields: [MemberVisitID], references: [id])
+  MemberVisit   MemberVisit?  @relation(fields: [MemberVisitID], references: [id])
+  Event         MemberEvent? @relation(fields: [EventId], references: [id])
+}
+
+model MemberEvent {
+  id                Int           @id @default(autoincrement())
+  Title             String
+  MemberInfoID      Int
+  Date              String
+  TotalGuestCount   Int
+  PresentGuestCount Int           @default(0)
+  StartTime         String
+  EndTime           String
+  EventDuration     Int
+  Summary           String
+  Member            Member        @relation(fields: [MemberInfoID], references: [id])
+  MemberGuest       MemberGuest[]
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
 }
